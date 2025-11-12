@@ -1,0 +1,20 @@
+---
+title: "HW5"
+author: "Lina Rettig"
+date: "December 12, 2025"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r data list}
+files_in_data <- list.files("data")
+print(files_in_data)
+```
+
