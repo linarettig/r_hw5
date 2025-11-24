@@ -11,6 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(broom)
+library(sf)
+library(tigris)
 ```
 
 ```{r data list}
@@ -18,10 +21,44 @@ files_in_data <- list.files("data")
 print(files_in_data)
 ```
 
+
+**Homicide Data**
 ```{r read in data}
 homicide <- read.csv("data/homicide-data.csv")
 ```
 
 
+**Denver, CO Data**
+```{r denver data}
+denver_homicides <- homicide %>% 
+  filter(city == "Denver", state == "CO") %>% 
+  filter(!is.na(lon), !is.na(lat)) %>% 
+  mutate(
+    status = ifelse(disposition == "Closed by arrest",
+                     "Solved",
+                     "Unsolved")
+  ) %>% 
+  mutate(
+    race_cat = fct_lump(victim_race, n = 3)
+  ) %>%
+  st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+denver_tracts <- tracts(state = "CO", county = "Denver",
+                        cb = TRUE, year = 2019)
+
+ggplot() +
+  geom_sf(data = denver_tracts, fill = "white", color = "gray70", size = 0.2) +
+  geom_sf(data = denver_homicides, aes(color = race_cat),
+          size = 0.8, alpha = 0.6) +
+  facet_wrap(~ status) +
+  scale_color_brewer(palette = "Set1", name = "Victim Race") +
+  labs(title = "Homicides in Denver, CO") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+```
 
 
