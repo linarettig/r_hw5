@@ -46,7 +46,10 @@ denver_homicides <- homicide %>%
     race_cat = fct_lump(victim_race, n = 3)
   ) %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326)
+```
 
+```{r}
+options(tigris_use_cache = TRUE)
 denver_tracts <- tracts(state = "CO", county = "Denver",
                         cb = TRUE, year = 2019)
 ```
