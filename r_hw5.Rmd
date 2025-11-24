@@ -6,7 +6,11 @@ output: word_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
 ```
 
 ```{r}
@@ -45,7 +49,11 @@ denver_homicides <- homicide %>%
 
 denver_tracts <- tracts(state = "CO", county = "Denver",
                         cb = TRUE, year = 2019)
+```
 
+
+**Denver Map**
+```{r denver map}
 ggplot() +
   geom_sf(data = denver_tracts, fill = "white", color = "gray70", size = 0.2) +
   geom_sf(data = denver_homicides, aes(color = race_cat),
@@ -60,5 +68,6 @@ ggplot() +
     panel.grid = element_blank()
   )
 ```
+
 
 
